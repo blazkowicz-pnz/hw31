@@ -26,5 +26,7 @@ def converter(csv_file, model_name, json_file):
     return res
 
 
-# converter(csv_file="categories.csv", model_name="ads.category", json_file="cat.json")
-converter(csv_file="ads.csv", model_name="ads.ad", json_file="ads.json")
+converter(csv_file="category.csv", model_name="ads.category", json_file="category.json")
+converter(csv_file="ad.csv", model_name="ads.ad", json_file="ad.json")
+converter(csv_file="location.csv", model_name="ads.location", json_file="location.json")
+converter(csv_file="user.csv", model_name="ads.user", json_file="user.json")
