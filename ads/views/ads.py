@@ -97,24 +97,26 @@ class AdCreateView(CreateView):
 @method_decorator(csrf_exempt, name="dispatch")
 class AdUpdateView(UpdateView):
     model = Ad
-    fields = fields = ("name", "author", "price", "description", "is_published", "category")
+    fields = ("name", "author", "price", "description", "is_published", "category")
 
     def patch(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
 
         ad_data = json.loads(request.body)
 
-        self.object.name = ad_data["name"],
+        self.object.name = ad_data["name"]
         self.object.price = ad_data["price"]
         self.object.description = ad_data["description"]
         self.object.author = get_object_or_404(User, pk=ad_data["author_id"])
         self.object.category = get_object_or_404(Category, pk=ad_data["category_id"])
+
         self.object.save()
 
         return JsonResponse({
             "id": self.object.id,
             "name": self.object.name,
-            "author": self.object.author_id,
+            "author_id": self.object.author_id,
+            "author": self.object.author.username,
             "price": self.object.price,
             "description": self.object.description,
             "is_published": self.object.is_published,
@@ -123,6 +125,39 @@ class AdUpdateView(UpdateView):
         })
 
 
+@method_decorator(csrf_exempt, name="dispatch")
+class AdDeleteView(DeleteView):
+    model = Ad
+    success_url = '/'
+
+    def delete(self, request, *args, **kwargs):
+        super().delete(request, *args, **kwargs)
+
+        return JsonResponse({}, status=204)
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class AdUploadImage(UpdateView):
+    model = Ad
+    fields = ("image",)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.image = request.FILES.get("image", None)
+
+        self.object.save()
+
+        return JsonResponse({
+            "id": self.object.id,
+            "name": self.object.name,
+            "author_id": self.object.author_id,
+            "author": self.object.author.username,
+            "price": self.object.price,
+            "description": self.object.description,
+            "is_published": self.object.is_published,
+            "category": self.object.category_id,
+            "image": self.object.image.url if self.object.image else None
+        })
 
 # @method_decorator(csrf_exempt, name="dispatch")
 # class AdsView(View):
