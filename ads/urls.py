@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from ads.views.service import root
 from ads.views.ads import AdListView, AdDetailView, AdCreateView, AdUpdateView, AdDeleteView, AdUploadImage
 from ads.views.category import CategoryListView, CategoryDeleteView, CategoryCreateView, CategoryUpdateView, CategoryDetailView
+from ads.views.users import UserListView, UserDetailView, UserCreateView, UserUpdateView, UserDeleteView
 from home_w27 import settings
 
 urlpatterns = [
@@ -17,7 +18,12 @@ urlpatterns = [
     path('ad/create/', AdCreateView.as_view()),
     path('ad/<int:pk>/update/', AdUpdateView.as_view()),
     path('ad/<int:pk>/delete/', AdDeleteView.as_view()),
-    path('ad/<int:pk>/upload_image/', AdUploadImage.as_view())
+    path('ad/<int:pk>/upload_image/', AdUploadImage.as_view()),
+    path('user/', UserListView.as_view()),
+    path('user/<int:pk>/', UserDetailView.as_view()),
+    path('user/create/', UserCreateView.as_view()),
+    path('user/<int:pk>/update/', UserUpdateView.as_view()),
+    path('user/<int:pk>/delete/', UserDeleteView.as_view()),
 
 
 ]
