@@ -1,6 +1,6 @@
 from ads.models import User
-from ads.serializers import UserCreateSerializer, UserListSerializer, UserDetailSerializer, UserUpdateSerializer, \
-    UserDeleteSerializer
+from ads.serializers.user import UserCreateSerializer, UserListSerializer, UserDetailSerializer, \
+    UserUpdateSerializer, UserDeleteSerializer
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 
 
