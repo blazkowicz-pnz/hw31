@@ -2,11 +2,11 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from rest_framework import routers
 
-from ads.views.ads import AdListView
+from ads.views.ads import AdListView, AdDetailView, AdCreateView, AdUpdateView, AdDeleteView
 from ads.views.category import CategoriesViewSet
 from ads.views.location import LocationsViewSet
 from ads.views.service import root
-from ads.views.ads import AdListView, AdDetailView, AdCreateView, AdUpdateView, AdDeleteView, AdUploadImage
+# from ads.views.ads import  AdCreateView, AdUpdateView, AdDeleteView, AdUploadImage
 from ads.views.users import UserCreateView, UserListView, UserDetailView, UserUpdateView, UserDeleteView
 
 from home_w27 import settings
@@ -19,23 +19,29 @@ router.register("category", CategoriesViewSet)
 urlpatterns = [
     path('', root),
     path("", include(router.urls)),
-    path("user/", UserListView.as_view()),
-    path("user/<int:pk>/", UserDetailView.as_view()),
+
     # path('cat/', CategoryListView.as_view()),
     # path('cat/<int:pk>/', CategoryDetailView.as_view()),
     # path('cat/create/', CategoryCreateView.as_view()),
     # path('cat/<int:pk>/update/', CategoryUpdateView.as_view()),
-    # path('cat/<int:pk>/delete/', CategoryDeleteView.as_view()),
-    path('ad/', AdListView.as_view()),
-    path('ad/<int:pk>/', AdDetailView.as_view()),
-    path('ad/create/', AdCreateView.as_view()),
-    path('ad/<int:pk>/update/', AdUpdateView.as_view()),
-    path('ad/<int:pk>/delete/', AdDeleteView.as_view()),
-    path('ad/<int:pk>/upload_image/', AdUploadImage.as_view()),
+    # # path('cat/<int:pk>/delete/', CategoryDeleteView.as_view()),
+    # path('ad/', AdListView.as_view()),
+    # path('ad/<int:pk>/', AdDetailView.as_view()),
+    # path('ad/create/', AdCreateView.as_view()),
+    # path('ad/<int:pk>/update/', AdUpdateView.as_view()),
+    # path('ad/<int:pk>/delete/', AdDeleteView.as_view()),
+    # path('ad/<int:pk>/upload_image/', AdUploadImage.as_view()),
     # path('user/', UserListView.as_view()),
     # path('user/<int:pk>/', UserDetailView.as_view()),
-    path('user/create/', UserCreateView.as_view()),
+
     path('ad/', AdListView.as_view()),
+    path("ad/<int:pk/>", AdDetailView),
+    path("ad/create/", AdCreateView.as_view()),
+    path("ad/<int:pk>/update/", AdUpdateView.as_view()),
+    path("ad/<int:pk>/delete/", AdDeleteView.as_view()),
+    path("user/", UserListView.as_view()),
+    path("user/<int:pk>/", UserDetailView.as_view()),
+    path('user/create/', UserCreateView.as_view()),
     path('user/<int:pk>/update/', UserUpdateView.as_view()),
     path('user/<int:pk>/delete/', UserDeleteView.as_view())
     # path('user/<int:pk>/delete/', UserDeleteView.as_view()),

@@ -6,9 +6,10 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from ads.models import Category, Ad, User
-from ads.serializers import AdSerializer
+from ads.serializers import AdSerializer, AdDetailSerializer, AdCreateSerializer, AdUpdateSerializer, AdDeleteSerializer
 from home_w27 import settings
-from  rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+
 
 class AdListView(ListAPIView):
     queryset = Ad.objects.all()
@@ -34,6 +35,25 @@ class AdListView(ListAPIView):
             self.queryset = self.queryset.filter(price__lte=int(price_to))
         return super().get(request, *args, **kwargs)
 
+
+class AdDetailView(RetrieveAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdDetailSerializer
+
+
+class AdCreateView(CreateAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdCreateSerializer
+
+
+class AdUpdateView(UpdateAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdUpdateSerializer
+
+
+class AdDeleteView(DestroyAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdDeleteSerializer
 
 # class AdListView(ListView):
 #     model = Ad
