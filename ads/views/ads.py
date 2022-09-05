@@ -5,7 +5,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 from ads.models import Category, Ad, User
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
+
+from ads.permissions import AdUpdateDeletePermission
 from ads.serializers.ad import AdSerializer, AdDetailSerializer
 from rest_framework.permissions import IsAuthenticated
 
@@ -71,33 +73,43 @@ class AdCreateView(CreateView):
         })
 
 
-@method_decorator(csrf_exempt, name="dispatch")
-class AdUpdateView(UpdateView):
+class AdUpdateView(UpdateAPIView):
+    queryset = Ad.objects.all()
+    permission_classes = [IsAuthenticated, AdUpdateDeletePermission]
+    serializer_class = AdSerializer
 
-    model = Ad
-    fields = ("name", "author", "price", "description", "is_published", "category")
 
-    def patch(self, request, *args, **kwargs):
-        super().post(request, *args, **kwargs)
-        ad_data = json.loads(request.body)
-        self.object.name = ad_data["name"]
-        self.object.price = ad_data["price"]
-        self.object.description = ad_data["description"]
-        self.object.author = get_object_or_404(User, pk=ad_data["author_id"])
-        self.object.category = get_object_or_404(Category, pk=ad_data["category_id"])
-        self.object.save()
-        return JsonResponse({
-            "id": self.object.id,
-            "name": self.object.name,
-            "author_id": self.object.author_id,
-            "author": self.object.author.username,
-            "price": self.object.price,
-            "description": self.object.description,
-            "is_published": self.object.is_published,
-            "category": self.object.category_id,
-            "image": self.object.image.url if self.object.image else None
-        })
 
+
+
+
+# @method_decorator(csrf_exempt, name="dispatch")
+# class AdUpdateView(UpdateView):
+#
+#     model = Ad
+#     fields = ("name", "author", "price", "description", "is_published", "category")
+#
+#     def patch(self, request, *args, **kwargs):
+#         super().post(request, *args, **kwargs)
+#         ad_data = json.loads(request.body)
+#         self.object.name = ad_data["name"]
+#         self.object.price = ad_data["price"]
+#         self.object.description = ad_data["description"]
+#         self.object.author = get_object_or_404(User, pk=ad_data["author_id"])
+#         self.object.category = get_object_or_404(Category, pk=ad_data["category_id"])
+#         self.object.save()
+#         return JsonResponse({
+#             "id": self.object.id,
+#             "name": self.object.name,
+#             "author_id": self.object.author_id,
+#             "author": self.object.author.username,
+#             "price": self.object.price,
+#             "description": self.object.description,
+#             "is_published": self.object.is_published,
+#             "category": self.object.category_id,
+#             "image": self.object.image.url if self.object.image else None
+#         })
+#
 
 @method_decorator(csrf_exempt, name="dispatch")
 class AdDeleteView(DeleteView):
