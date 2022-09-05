@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ads.models import Ad, Category, User, Location
+from ads.models import Ad, Category, User, Location, Selection
 
 
 @admin.register(Ad)
@@ -26,5 +26,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("username",)
     list_filter = ("role",)
 
-
+@admin.register(Selection)
+class SelecrionAdmin(admin.ModelAdmin):
+    ...
 

@@ -8,3 +8,4 @@ class CategoriesViewSet(ModelViewSet):
     serializer_class = CategorySerializer
 
 
+

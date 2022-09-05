@@ -4,9 +4,11 @@ from rest_framework import routers
 from ads.views.ads import AdListView, AdDetailView
 from ads.views.category import CategoriesViewSet
 from ads.views.location import LocationsViewSet
+from ads.views.selection import SelectionListView, SelectionDetailView, SelectionCreateView, SelectionUpdateView
 from ads.views.service import root
 from ads.views.ads import  AdCreateView, AdUpdateView, AdDeleteView, AdUploadImage
 from ads.views.users import UserCreateView, UserListView, UserDetailView, UserUpdateView, UserDeleteView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from home_w27 import settings
 
 router = routers.SimpleRouter()
@@ -22,11 +24,22 @@ urlpatterns = [
     path('ad/<int:pk>/update/', AdUpdateView.as_view()),
     path('ad/<int:pk>/delete/', AdDeleteView.as_view()),
     path('ad/<int:pk>/upload_image/', AdUploadImage.as_view()),
+
     path("user/", UserListView.as_view()),
     path("user/<int:pk>/", UserDetailView.as_view()),
     path('user/create/', UserCreateView.as_view()),
     path('user/<int:pk>/update/', UserUpdateView.as_view()),
-    path('user/<int:pk>/delete/', UserDeleteView.as_view())
+    path('user/<int:pk>/delete/', UserDeleteView.as_view()),
+
+    path('user/token/', TokenObtainPairView.as_view()),
+    path('user/token/refresh/', TokenRefreshView.as_view()),
+
+    path('selection/', SelectionListView.as_view()),
+    path('selection/<int:pk>/', SelectionDetailView.as_view()),
+    path('selection/create/', SelectionCreateView.as_view()),
+    path('selection/<int:pk>/update/', SelectionUpdateView.as_view())
+
+
 
 ]
 

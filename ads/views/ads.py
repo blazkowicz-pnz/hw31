@@ -7,11 +7,13 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from ads.models import Category, Ad, User
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from ads.serializers.ad import AdSerializer, AdDetailSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 class AdListView(ListAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
+
 
     def get(self, request, *args, **kwargs):
         categories = request.GET.getlist("cat", [])
@@ -37,6 +39,7 @@ class AdListView(ListAPIView):
 class AdDetailView(RetrieveAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdDetailSerializer
+    permission_classes = [IsAuthenticated]
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -70,6 +73,7 @@ class AdCreateView(CreateView):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class AdUpdateView(UpdateView):
+
     model = Ad
     fields = ("name", "author", "price", "description", "is_published", "category")
 
