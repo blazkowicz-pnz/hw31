@@ -35,14 +35,3 @@ class AdUpdateDeletePermission(permissions.BasePermission):
             return False
 
 
-
-# class SelectionCreatePermission(permissions.BasePermission):
-#     message = "You can not create selection"
-#
-#     def has_permission(self, request, view):
-#         if view.kwargs["pk"] == request.user.id:
-#             return True
-#         elif request.user.role != User.Role.MEMBER:
-#             return True
-#         else:
-#             return False
