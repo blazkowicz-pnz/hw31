@@ -1,5 +1,8 @@
+from django.core.validators import MinLengthValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+from ads.validators import check_birth_date, check_email
 
 
 class Location(models.Model):
@@ -29,6 +32,8 @@ class User(AbstractUser):
     role = models.CharField(max_length=9, choices=Role.choices, default=Role.MEMBER)
     age = models.PositiveSmallIntegerField(null=True, blank=True)
     locations = models.ManyToManyField(Location)
+    birth_date = models.DateField(validators=[check_birth_date])
+    email = models.EmailField(validators=[check_email], unique=True)
 
     class Meta:
         verbose_name = "Пользователь"
@@ -46,6 +51,7 @@ class User(AbstractUser):
 class Category(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=50)
+    slug = models.CharField(max_length=10, unique=True, validators=[MinLengthValidator(5)])
 
     class Meta:
         verbose_name = "Категория"
@@ -56,7 +62,7 @@ class Category(models.Model):
 
 
 class Ad(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, validators=[MinLengthValidator(10)])
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     price = models.PositiveIntegerField()
     description = models.TextField(null=True)

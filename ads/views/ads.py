@@ -51,6 +51,8 @@ class AdCreateView(CreateView):
 
     def post(self, request, *args, **kwargs):
         ad_data = json.loads(request.body)
+        if ad_data["is_published"] is True:
+            return JsonResponse({"error": "bad status"},status=400)
 
         new_ad = Ad.objects.create(
             name=ad_data["name"],
