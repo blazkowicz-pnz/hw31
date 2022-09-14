@@ -32,7 +32,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=9, choices=Role.choices, default=Role.MEMBER)
     age = models.PositiveSmallIntegerField(null=True, blank=True)
     locations = models.ManyToManyField(Location)
-    birth_date = models.DateField(validators=[check_birth_date])
+    birth_date = models.DateField(validators=[check_birth_date], null=True)
     email = models.EmailField(validators=[check_email], unique=True)
 
     class Meta:
