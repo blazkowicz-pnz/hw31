@@ -5,10 +5,10 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, UpdateView, DeleteView
 from ads.models import Category, Ad, User
-from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, CreateAPIView
 
 from ads.permissions import AdUpdateDeletePermission
-from ads.serializers.ad import AdSerializer, AdDetailSerializer
+from ads.serializers.ad import AdSerializer, AdDetailSerializer, AdCreateSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -45,34 +45,39 @@ class AdDetailView(RetrieveAPIView):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-class AdCreateView(CreateView):
-    model = Ad
-    fields = ("name", "author", "price", "description", "is_published", "category")
+class AdCreateView(CreateAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdCreateSerializer
 
-    def post(self, request, *args, **kwargs):
-        ad_data = json.loads(request.body)
-        if ad_data["is_published"] is True:
-            return JsonResponse({"error": "bad status"},status=400)
 
-        new_ad = Ad.objects.create(
-            name=ad_data["name"],
-            author=get_object_or_404(User, pk=ad_data["author_id"]),
-            price=ad_data["price"],
-            description=ad_data["description"],
-            is_published=ad_data["is_published"],
-            category=get_object_or_404(Category, pk=ad_data["category_id"]),
-        )
 
-        return JsonResponse({
-            "id": new_ad.id,
-            "name": new_ad.name,
-            "author": new_ad.author_id,
-            "price": new_ad.price,
-            "description": new_ad.description,
-            "is_published": new_ad.is_published,
-            "category": new_ad.category_id,
-            "image": new_ad.image.url if new_ad.image else None
-        })
+    # model = Ad
+    # fields = ("name", "author", "price", "description", "is_published", "category")
+
+    # def post(self, request, *args, **kwargs):
+    #     ad_data = json.loads(request.body)
+    #     if ad_data["is_published"] is True:
+    #         return JsonResponse({"error": "bad status"},status=400)
+    #
+    #     new_ad = Ad.objects.create(
+    #         name=ad_data["name"],
+    #         author=get_object_or_404(User, pk=ad_data["author_id"]),
+    #         price=ad_data["price"],
+    #         description=ad_data["description"],
+    #         is_published=ad_data["is_published"],
+    #         category=get_object_or_404(Category, pk=ad_data["category_id"]),
+    #     )
+    #
+    #     return JsonResponse({
+    #         "id": new_ad.id,
+    #         "name": new_ad.name,
+    #         "author": new_ad.author_id,
+    #         "price": new_ad.price,
+    #         "description": new_ad.description,
+    #         "is_published": new_ad.is_published,
+    #         "category": new_ad.category_id,
+    #         "image": new_ad.image.url if new_ad.image else None
+    #     })
 
 
 class AdUpdateView(UpdateAPIView):
