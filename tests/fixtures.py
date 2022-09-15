@@ -18,9 +18,10 @@ import pytest
 def my_token(client, django_user_model):
     username = "ivan"
     password = "ivan"
+    email = "ivan@ivan.ru"
 
     django_user_model.objects.create_user(
-        username=username, password=password, role="admin"
+        username=username, password=password, email=email, role="admin"
     )
 
     response = client.post("/user/token/", {
